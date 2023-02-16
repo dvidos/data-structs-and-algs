@@ -47,9 +47,9 @@ def test():
         print(f"  sorted_a[{i}] = \"{sorted_a[i]}\"")
     
     print("Linear search...");
-    print("{:.6f}".format(timeit.timeit(lambda: search_linearly(a, "needle"), number=1000)))
+    print("  {:.6f}".format(timeit.timeit(lambda: search_linearly(a, "needle"), number=1000)))
     print("Binary search...")
-    print("{:.6f}".format(timeit.timeit(lambda: search_binary(sorted_a, "needle"), number=1000)))
+    print("  {:.6f}".format(timeit.timeit(lambda: search_binary(sorted_a, "needle"), number=1000)))
 
 
 test()
@@ -76,7 +76,7 @@ Generating random array of 100000 items
   sorted_a[8] = "AAIlSbH"
   sorted_a[9] = "AAJslkHV"
 Linear search...
-3.397247
+  3.397247
 Binary search...
-0.001615
+  0.001615
 """

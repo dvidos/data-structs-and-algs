@@ -51,7 +51,41 @@ def merge_sort(arr: list) -> list:
     return arr
 
 
+
+def _qsort_partition(arr, start, end):
+    # pick a pivot point (the last element in our case)
+    # swap all the items larger than the pivot item to its right.
+    # finally, swap the pivot item to the correct location.
+    # return that pivotal final location
+    pivot_point = end - 1
+    pivot_value = arr[pivot_point]
+    smalls_count = 0
+    for i in range(start, end):
+        if arr[i] < pivot_value:
+            # stash all "small" values at the start
+            tmp = arr[start + smalls_count]
+            arr[start + smalls_count] = arr[i]
+            arr[i] = tmp
+            smalls_count += 1
+    # put the pivot value at correct place
+    tmp = arr[start + smalls_count]
+    arr[start + smalls_count] = arr[pivot_point]
+    arr[pivot_point] = tmp
+    return start + smalls_count  # the position of the pivot in the group
+
+
+def _qsort_at(arr, start, end):
+    if start + 1 >= end:
+        return
+    # pivotal is to partition the array in linear time, 
+    # placing all lower than the pivot to the left, all greater to the right
+    partition_point = _qsort_partition(arr, start, end)
+    _qsort_at(arr, start, partition_point)
+    _qsort_at(arr, partition_point + 1, end)
+
+
 def quick_sort(arr: list) -> list:
+    _qsort_at(arr, 0, len(arr))
     return arr
 
 
@@ -76,22 +110,37 @@ def test():
     size = 10000
     print(f"Creating random array of {size} items")
     a = create_random_array(size)
-    print("a = " + str(a[:8]) + "...")
+    print("  a = " + str(a[:8]) + "...")
 
     a1 = a.copy()
     a2 = a.copy()
     a3 = a.copy()
 
     print("Bubble sort...");
-    print("{:.6f}".format(timeit.timeit(lambda: bubble_sort(a1), number=1)))
+    print("  {:.6f}".format(timeit.timeit(lambda: bubble_sort(a1), number=1)))
     print("  sorted = " + str(a1[:8]) + "...")
 
     print("Merge sort...")
-    print("{:.6f}".format(timeit.timeit(lambda: merge_sort(a2), number=1)))
+    print("  {:.6f}".format(timeit.timeit(lambda: merge_sort(a2), number=1)))
     print("  sorted = " + str(a2[:8]) + "...")
 
     print("Quick sort...")
-    print("{:.6f}".format(timeit.timeit(lambda: quick_sort(a3), number=1)))
+    print("  {:.6f}".format(timeit.timeit(lambda: quick_sort(a3), number=1)))
     print("  sorted = " + str(a3[:8]) + "...")
 
+
+
 test()
+"""
+Creating random array of 10000 items
+  a = ['wrsvahxxa', 'hljsb', 'dplpnqfor', 'dtjeikj', 'jgxvrc', 'wvjfeh', 'hyoqc', 'aecbbgyvgs']...
+Bubble sort...
+  8.418231
+  sorted = ['aacjplpk', 'aacuvd', 'aajmaj', 'aajmxgg', 'aakbu', 'aamyxmqq', 'aaoplgzlcz', 'aaqlpc']...
+Merge sort...
+  0.024804
+  sorted = ['aacjplpk', 'aacuvd', 'aajmaj', 'aajmxgg', 'aakbu', 'aamyxmqq', 'aaoplgzlcz', 'aaqlpc']...
+Quick sort...
+  0.017305
+  sorted = ['aacjplpk', 'aacuvd', 'aajmaj', 'aajmxgg', 'aakbu', 'aamyxmqq', 'aaoplgzlcz', 'aaqlpc']...
+"""
